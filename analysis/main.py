@@ -8,6 +8,7 @@ import sys
 
 import statistic
 import distribution
+import regions
 
 
 files = os.listdir("data")
@@ -17,6 +18,7 @@ EXPECTED = (18 * 1000) / 127
 
 # Stores Chi Square values for each file
 dataset = [0] * len(files)
+contents = [""] * len(files)
 
 print("Searching through files...")
 
@@ -24,6 +26,9 @@ print("Searching through files...")
 for index, filename in enumerate(files):
     print(" Scanning {}...".format(filename))
     data = open("data/" + filename, "r").read()
+
+    # Save file contents for later
+    contents[index] = data
 
     # Get character distribution & calculate Chi Square
     freq = distribution.frequency(data)
@@ -55,3 +60,13 @@ if len(outliers[0]) < 1:
 
 for i in outliers[0]:
     print(" {} (χ² = {})".format(files[i], dataset[i]))
+
+print("\nFinding usual regions of outlier files...")
+
+for i in outliers[0]:
+    strange = regions.unusal(contents[i])
+
+    print("\n")
+
+    print("{}".format(files[i]))
+    print("{}".format(strange))

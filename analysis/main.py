@@ -2,9 +2,13 @@
 # Will first scan data/ and find Chi-squared values of the distribution
 
 import os
+import numpy as np
+
+import sys
+
+import statistic
 import distribution
 
-from numpy import percentile
 
 files = os.listdir("data")
 
@@ -28,16 +32,26 @@ for index, filename in enumerate(files):
 print("Done\n\n")
 
 # Calculate the five number summary using numpy
-quarts = percentile(dataset, [25, 50, 75])
+quarts = np.percentile(dataset, [25, 50, 75])
 
 print("Chi Square Distribution of Characters -- Five Number Summary")
-print("MIN = {} ({})".format(min(dataset), files[dataset.index(min(dataset))]))
-print("Q1 = {}".format(quarts[0]))
-print("Q2 = {}".format(quarts[1]))
-print("Q3 = {}".format(quarts[2]))
-print("MAX = {} ({})".format(max(dataset), files[dataset.index(max(dataset))]))
+print(" MIN = {} ({})".format(min(dataset), files[dataset.index(min(dataset))]))
+print(" Q1 = {}".format(quarts[0]))
+print(" Q2 = {}".format(quarts[1]))
+print(" Q3 = {}".format(quarts[2]))
+print(" MAX = {} ({})".format(max(dataset), files[dataset.index(max(dataset))]))
 
 print("\n")
 
 # Find outliers
 print("Outliers")
+outliers = statistic.outliers(dataset)
+
+if len(outliers[0]) < 1:
+    print(" NONE")
+
+    print("\nNo usual files found.")
+    sys.exit(0)
+
+for i in outliers[0]:
+    print(" {} (χ² = {})".format(files[i], dataset[i]))

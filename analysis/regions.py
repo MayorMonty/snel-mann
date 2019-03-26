@@ -12,8 +12,8 @@ def unusal(string, chi_threshold = None):
         chi_threshold = distribution.chi_square((18 * 1000) / 127, distribution.frequency(string))
 
 
-    if chi > chi_threshold / 4:
-        return unusal([first, second][index], chi_threshold * 2)
+    if chi > chi_threshold:
+        return unusal([first, second][index], chi_threshold)
     else:
         return [first, second][index]
 
